@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, getDevicesList, getInfo, addDevice } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -31,11 +31,17 @@ const actions = {
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
+    const base64Password = btoa(password)
+
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ mobile: username.trim(), pwd: base64Password }).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        console.log('data', data)
+
+        commit('SET_TOKEN', data.token.token)
+        // commit('SET_NAME', data.nick_name)
+        // commit('SET_AVATAR', data.mobile)
+        setToken(data.token.token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -53,9 +59,9 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
+        const { nick_name, avatar } = data
 
-        commit('SET_NAME', name)
+        commit('SET_NAME', nick_name)
         commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {
@@ -67,11 +73,28 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
+      removeToken() // must remove  token  first
+      resetRouter()
+      commit('RESET_STATE')
+      resolve()
+    })
+  },
+
+  // 获取设备列表
+  getDevicesList({ commit, state }, data) {
+    return new Promise((resolve, reject) => {
+      getDevicesList(data).then(response => {
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  addDevice({ commit, state }, data) {
+    return new Promise((resolve, reject) => {
+      addDevice(data).then(response => {
+        resolve(response)
       }).catch(error => {
         reject(error)
       })
