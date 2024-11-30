@@ -3,6 +3,12 @@
     <span class="name-text">{{ name }}</span>
 
     <div class="right-menu">
+      <!-- coin -->
+      <div v-if="token" class="coin-text">
+        $
+        {{ coin }}
+      </div>
+
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <!-- 使用 el-avatar 显示首字母 -->
@@ -25,9 +31,9 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters([
-      'sidebar',
-      'avatar',
-      'name'
+      'name',
+      'coin',
+      'token'
     ])
   },
   methods: {
@@ -67,6 +73,22 @@ export default {
     }
   }
 
+  .coin-text {
+    min-width: 50px;
+    margin-top: 5px;
+    margin-right: 10px;
+    height: 40px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    color: #FFD700;
+    background-color: #b4b4b4;
+    /* 金色 */
+    font-weight: bold;
+    border-radius: 10px;
+  }
+
   .breadcrumb-container {
     float: left;
   }
@@ -75,6 +97,8 @@ export default {
     float: right;
     height: 100%;
     line-height: 50px;
+    display: flex;
+    justify-content: center;
 
     &:focus {
       outline: none;
@@ -109,14 +133,18 @@ export default {
           cursor: pointer;
           width: 40px;
           height: 40px;
-          border-radius: 10px; /* 更改为圆形 */
-          background-color: #b4b4b4; /* 设置背景色（可自定义） */
+          border-radius: 10px;
+          /* 更改为圆形 */
+          background-color: #b4b4b4;
+          /* 设置背景色（可自定义） */
           display: flex;
           justify-content: center;
           align-items: center;
-          color: white; /* 文字颜色 */
+          color: white;
+          /* 文字颜色 */
           font-weight: bold;
-          font-size: 18px; /* 文字大小 */
+          font-size: 18px;
+          /* 文字大小 */
         }
 
         .el-icon-caret-bottom {
@@ -130,6 +158,7 @@ export default {
     }
   }
 }
+
 .name-text {
   line-height: 50px;
   margin-left: 20px;
